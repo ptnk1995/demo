@@ -1,10 +1,34 @@
 Rails.application.routes.draw do
+
+  root 'home#home'
+  get 'static_pages/home'
+
+  # get 'users/new'
+  # get 'users/show'
+  #get 'users/:id' => 'users#show'
+  get    'signup'  => 'users#new'
+  get    'login'   => 'sessions#new'
+  post   'login'   => 'sessions#create'
+  delete 'logout'  => 'sessions#destroy'
+
+  resources :users do
+    member do
+      get :following, :followers
+    end
+  end
+
+  resources :microposts do
+    resources :comments
+  end
+
+  resources :microposts, only: [:create, :destroy, :show]
+  resources :relationships,       only: [:create, :destroy]
+
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
   # You can have the root of your site routed with "root"
-   root 'application#index'
-
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
 
